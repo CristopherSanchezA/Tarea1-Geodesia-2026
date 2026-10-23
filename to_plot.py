@@ -7,6 +7,9 @@
 import numpy as np
 import pylab as pl
 
+carpeta = "pulled_data_terremoto_noto_2024_japon"
+ruta = f"{carpeta}/id_coords.txt"
+
 def to_plot(t, data , pred , t_eq = None, t_at = None, name = 'Station', Tau = None):
     ew = data[:,0]
     ns = data[:,1]
@@ -14,7 +17,7 @@ def to_plot(t, data , pred , t_eq = None, t_at = None, name = 'Station', Tau = N
     Pew = pred[:,0]
     Pns = pred[:,1]
     Pup = pred[:,2]
-    fig1_name="serie1.svg"
+    ##fig1_name="serie1.svg"
     fig1 = pl.figure(1)
     fig1.set_size_inches(11, 10)
     pl.subplot(321)
@@ -103,7 +106,7 @@ def to_plot(t, data , pred , t_eq = None, t_at = None, name = 'Station', Tau = N
     pl.ylabel('UP [mm]')
     pl.xlabel('Tiempo')
     pl.tight_layout()
-    pl.savefig(fig1_name, dpi = 300)
+    #pl.savefig(fig1_name, dpi = 300)
     pl.show()
     return None
 # %%

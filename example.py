@@ -10,9 +10,36 @@ from datetime import datetime
 # importo el modelo de trayectoria y otras funciones
 from Trajectory_ayudantia import Trajectory as tj
 from Trajectory_ayudantia import toYearFraction
-
+from pathlib import Path
+import pylab as pl
 # estaión que quiero correr
-sta = 'BN05.txt'
+#sta = 'BN05.txt'
+
+carpeta = "pulled_data_terremoto_noto_2024_japon"
+ruta = f"{carpeta}/id_coords.txt"
+
+matriz = np.loadtxt(ruta, dtype=str)
+ID = matriz[:, 0]
+
+t_eq_noto2024 = toYearFraction(datetime(2024, 1, 1))  # 7.5 Mww
+t_eq_noto2023 = toYearFraction(datetime(2023, 5, 5))  # 6.3 Mww
+t_eq = [t_eq_noto2024, t_eq_noto2023]
+
+for codigo in ID:
+    # Le indicamos a Python que el archivo está adentro de la subcarpeta
+    sta = f"{carpeta}/{codigo}.txt"
+    param = tj(sta, t_eq=t_eq, t_at=False, Do_plot=True, new_at=True, tau=15, t_cut=False)
+    pl.savefig(f"{carpeta}/{codigo}_trajectory_plot.png")
+    pl.close()
+
+# Corroborar largo de ruptura en el mata_noto.png
+# Eliminar estaciones lejos del epicentro (Esto implica modificar a mano el id_coords).
+# Arreglar el guardado del to_plot (tratar de que el guardado sea dentro del to_plot).
+# Tratar de crear una recta en el t_eq del terremoto para que se vea mejor el salto en la figura.
+
+
+
+
 #sta = 'PATH.txt'
 #name = antenas
 # corro el modelo de trayectoria
@@ -41,7 +68,7 @@ sta = 'BN05.txt'
 		#		new_at=True,tau = 15, t_cut=False)
 
 
-t_eq_valparaiso = toYearFraction(datetime(2017,4,24))
+#t_eq_valparaiso = toYearFraction(datetime(2017,4,24))
 #param = tj(sta,  t_eq=[t_eq_illapel,t_eq_valparaiso], t_at=False, Do_plot=True, 
 		#		new_at=True,tau = 15, t_cut=False)
 
@@ -53,21 +80,21 @@ t_eq_valparaiso = toYearFraction(datetime(2017,4,24))
 
 
 
-t_eq_maule = toYearFraction(datetime(2010,2,27))
-t_eq_calera = toYearFraction(datetime(2012,3,25))
-t_eq_calera2 = toYearFraction(datetime(2012,4,17))
-t_eq_sanantonio = toYearFraction(datetime(2014,3,4))
-t_eq_sanantonio2 = toYearFraction(datetime(2016,10,27))
-t_eq_calera3 = toYearFraction(datetime(2014,8,23))
-t_eq_otro = toYearFraction(datetime(2014,4,5))
-t_eq_illapel = toYearFraction(datetime(2015,9,16))
-t_eq_valpo = toYearFraction(datetime(2017,4,27))
+#t_eq_maule = toYearFraction(datetime(2010,2,27))
+#t_eq_calera = toYearFraction(datetime(2012,3,25))
+#t_eq_calera2 = toYearFraction(datetime(2012,4,17))
+#t_eq_sanantonio = toYearFraction(datetime(2014,3,4))
+#t_eq_sanantonio2 = toYearFraction(datetime(2016,10,27))
+#t_eq_calera3 = toYearFraction(datetime(2014,8,23))
+#t_eq_otro = toYearFraction(datetime(2014,4,5))
+#t_eq_illapel = toYearFraction(datetime(2015,9,16))
+#t_eq_valpo = toYearFraction(datetime(2017,4,27))
 #t_eq_huasco = toYearFraction(datetime(2020,9,1))
 
 #t_eq=[ t_eq_calera,t_eq_calera2, t_eq_otro, t_eq_calera3,t_eq_sanantonio, t_eq_illapel, t_eq_valpo]
-t_eq=[  t_eq_calera, t_eq_calera2, t_eq_illapel, t_eq_valpo]
-param = tj(sta,  t_eq=t_eq, t_at=False, Do_plot=True, 
-				new_at=True, tau = 15, t_cut=False)
+#t_eq=[  t_eq_calera, t_eq_calera2, t_eq_illapel, t_eq_valpo]
+#param = tj(sta,  t_eq=t_eq, t_at=False, Do_plot=True, 
+				#new_at=True, tau = 15, t_cut=False)
 
 print("fg_all")
 print(param.keys()) # muestra los diccionarios que devuelve el modelo
@@ -79,3 +106,22 @@ print(param.keys()) # muestra los diccionarios que devuelve el modelo
 
 # %%
 ##
+station_dir = Path("pulled_data_terremoto noto 2024 japon")
+station_ids = [
+    line.split()[0]
+    for line in (station_dir / "id_coords.txt").read_text().splitlines()
+    if line.strip()
+]
+
+params = {}
+for station_id in station_ids:
+    station_file = station_dir / f"{station_id}.txt"
+    params[station_id] = tj(
+        str(station_file),
+        t_eq=t_eq,
+        t_at=False,
+        Do_plot=True,
+        new_at=True,
+        tau=15,
+        t_cut=False,
+    )
