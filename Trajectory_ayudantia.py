@@ -69,12 +69,15 @@ def extract_at(name, t_cut = False):
     return t_at
 
 def read_coords(ts_file):
-    carpeta = "pulled_data_terremoto_noto_2024_japon"
-    ruta = f"{carpeta}/" + ts_file.split("/")[-1]
-    
-    matriz = np.loadtxt(ruta, dtype=float, usecols=(1, 2))
-    lon = matriz[:, 1]
-    lat = matriz[:, 2]
+    # usecols=(0, 1, 2) fuerza a leer únicamente las primeras 3 columnas
+    matriz = np.loadtxt(ts_file, dtype=str, usecols=(0, 1, 2))
+    coords = {}
+
+    for ID, lon, lat in matriz:
+        coords[ID] = [float(lon), float(lat)]
+        
+    return coords  # Importante: devolver el diccionario
+
 
 def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, Do_plot = False,
                t_cut = False):
@@ -193,16 +196,22 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
     wrms_u = np.sqrt(sum((Pup - up)**2 / sigm_up**2 ) / sum(1/ sigm_up**2))
 
 # Inicializar vearibles lon y lat con None
-
+    carpeta = "pulled_data_zona_estable_AM"
+    ruta = f"{carpeta}/id_coords.txt"
+    coords = read_coords(ruta)
     lon = None
     lat = None
 
-# Verificar si la estación está en el diccionario
 
+# Verificar si la estación está en el diccionario
+    if name in coords:
+        lon, lat = coords[name]
+    else:
+        print(f"Estación {name} no encontrada en el archivo de coordenadas.")
 
 
 # Velocidades ITRF
-
+    
 
 
 # Formato de velocidades ITRF

@@ -56,7 +56,7 @@ from datetime import datetime
 from Trajectory_ayudantia import Trajectory as tj
 from Trajectory_ayudantia import toYearFraction
 
-carpeta = "pulled_data_terremoto"
+carpeta = "pulled_data_zona_estable_AM"
 ruta = f"{carpeta}/id_coords.txt"
 
 matriz = np.loadtxt(ruta, dtype=str)
@@ -81,9 +81,28 @@ SEJN # Sejong, noreste de DAE2
 J456 # Isla entre Corea del Sur y Japón / en el UP hay un heaviside
 K202 # En la misma isla
 SBAO # Sobaeksan National Park, Corea del Sur
-VLAV # Vladivostok, Rusia
+#VLAV # Vladivostok, Rusia # Descartado por saltos/residuales/outliers
 VLWK # Vladivostok, Rusia
-VLDV # \\
+#VLDV # \\ # Descartado por residuales muy altos
 LAZO # Al Este de las anteriores
 CHAN # Changchun, China
 KOHG # Centro Espacial Naro (Sur de Corea (del sur xd))
+# %%
+carpeta = "pulled_data_terremoto_noto_2024_japon"
+coords = {}
+with open(ts_file, "r") as f: # abre el archivo y r significa 
+    for name in f:
+        ID = []
+        lon = name[1]
+        lat = name[2]
+        coords = [lon, lat]
+        break
+# %%
+carpeta = "pulled_data_terremoto_noto_2024_japon"
+coords = {}
+
+with open(f"{carpeta}/id_coords.txt", "r") as f:
+    for name in f:
+        station_id, lon, lat = name.split()[:3]
+        coords[station_id] = [float(lon), float(lat)]
+        
