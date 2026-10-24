@@ -68,6 +68,14 @@ def extract_at(name, t_cut = False):
         t_at = []
     return t_at
 
+def read_coords(ts_file):
+    carpeta = "pulled_data_terremoto_noto_2024_japon"
+    ruta = f"{carpeta}/" + ts_file.split("/")[-1]
+    
+    matriz = np.loadtxt(ruta, dtype=float, usecols=(1, 2))
+    lon = matriz[:, 1]
+    lat = matriz[:, 2]
+
 def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, Do_plot = False,
                t_cut = False):
     name = ts_file[-8:-4]
@@ -155,7 +163,7 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
 
 #Plotear, pt recuerda que es la función de to_plot
 
-        if Do_plot == True:
+        if Do_plot == False: #Colocar en True
             datas = np.vstack((ew,ns,up)).T
             pred = np.vstack((Pew,Pns,Pup)).T
             pt(t, datas, pred, t_eq=t_eq, t_at=t_at, name=name)
@@ -184,8 +192,27 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
     wrms_n = np.sqrt(sum((Pns - ns)**2 / sigm_ns**2 ) / sum(1/ sigm_ns**2))
     wrms_u = np.sqrt(sum((Pup - up)**2 / sigm_up**2 ) / sum(1/ sigm_up**2))
 
+# Inicializar vearibles lon y lat con None
+
+    lon = None
+    lat = None
+
+# Verificar si la estación está en el diccionario
+
+
+
+# Velocidades ITRF
+
+
+
+# Formato de velocidades ITRF
+
+
+# Guardar archivo de velocidades ITRF si lon y lat no son None con os.path.join y np.savetxt, con formato de 6 decimales y encabezado con nombre de estación, lon y lat
+    
 # Matríz final
     return {'Param_ew' : Iew, 'Param_ns' : Ins, 'Param_up' : Iup,
             'fg_all' : G, 'fg' : G_all, 'new_jumps' : idx_jump,
             'data' : datas,
             'wrms_e': wrms_e, 'wrms_u': wrms_u, 'wrms_n': wrms_n }
+# agregar variables de velocidades ITRF y lon y lat al return

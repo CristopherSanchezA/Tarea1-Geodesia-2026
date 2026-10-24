@@ -107,6 +107,8 @@ def to_plot(t, data , pred , t_eq = None, t_at = None, name = 'Station', Tau = N
     pl.xlabel('Tiempo')
     pl.tight_layout()
     #pl.savefig(fig1_name, dpi = 300)
+
+    
     pl.show()
     return None
 # %%

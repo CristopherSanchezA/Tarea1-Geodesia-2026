@@ -33,11 +33,16 @@ for codigo in ID:
     pl.close()
 
 # Corroborar largo de ruptura en el mata_noto.png
+
+
 # Eliminar estaciones lejos del epicentro (Esto implica modificar a mano el id_coords).
+
+
 # Arreglar el guardado del to_plot (tratar de que el guardado sea dentro del to_plot).
 # Tratar de crear una recta en el t_eq del terremoto para que se vea mejor el salto en la figura.
+# Añadir trench real (ayuda ayudante)
 
-
+# Quitar/Achicar medio grado de Oeste a Este
 
 
 #sta = 'PATH.txt'

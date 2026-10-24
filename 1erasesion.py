@@ -56,7 +56,7 @@ from datetime import datetime
 from Trajectory_ayudantia import Trajectory as tj
 from Trajectory_ayudantia import toYearFraction
 
-carpeta = "pulled_data_terremoto_noto_2024_japon"
+carpeta = "pulled_data_terremoto"
 ruta = f"{carpeta}/id_coords.txt"
 
 matriz = np.loadtxt(ruta, dtype=str)
@@ -66,10 +66,24 @@ t_eq_noto2024 = toYearFraction(datetime(2024, 1, 1))  # 7.5 Mww
 t_eq_noto2023 = toYearFraction(datetime(2023, 5, 5))  # 6.3 Mww
 t_eq = [t_eq_noto2024, t_eq_noto2023]
 
+param_am = {} # Creamos la variable para poder guardar los datos de cada estación en cada vuelta
+
 for codigo in ID:
     # Le indicamos a Python que el archivo está adentro de la subcarpeta
     sta = f"{carpeta}/{codigo}.txt"
-    param = tj(sta, t_eq=t_eq, t_at=False, Do_plot=True, new_at=True, tau=15, t_cut=False)
-    break
+    param = tj(sta, t_eq=False, t_at=False, Do_plot=False, new_at=False, tau=15, t_cut=2017)
+    param_am[codigo] = param
 
 # %%
+YONS # Seoul (centro)
+DAE2 # Dajeon Corea del Sur
+SEJN # Sejong, noreste de DAE2
+J456 # Isla entre Corea del Sur y Japón / en el UP hay un heaviside
+K202 # En la misma isla
+SBAO # Sobaeksan National Park, Corea del Sur
+VLAV # Vladivostok, Rusia
+VLWK # Vladivostok, Rusia
+VLDV # \\
+LAZO # Al Este de las anteriores
+CHAN # Changchun, China
+KOHG # Centro Espacial Naro (Sur de Corea (del sur xd))
