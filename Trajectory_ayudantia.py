@@ -9,6 +9,7 @@ import numpy as np
 import pylab as pl
 from FG import G_matrix as FG # crea las funciones bases para armar la matriz G
 from to_plot import to_plot as pt # para plotear las series de tiempo
+from to_plot2 import to_plot2 as pt2 # para el modelo de trayectorias por componente
 import time
 from MinCuad import MinCuadPesos as mmc # minimos cuadrados con pesos
 from datetime import date, datetime, timedelta # ordenar los tiempos
@@ -166,10 +167,10 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
 
 #Plotear, pt recuerda que es la función de to_plot
 
-        if Do_plot == False: #Colocar en True
+        if Do_plot == True: #Colocar en True
             datas = np.vstack((ew,ns,up)).T
             pred = np.vstack((Pew,Pns,Pup)).T
-            pt(t, datas, pred, t_eq=t_eq, t_at=t_at, name=name)
+            pt2(t, datas, pred,sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup,G_all['g_lineal'],G_all['g_annual'],G_all['g_heavis_eq'],G_all['g_post'],t_eq=t_eq,t_at=t_at,name=name,Tau=tau)
             if new_at == True:
                 idx_jump = pl.ginput(20, timeout = 20)
                 pl.show()
