@@ -6,8 +6,9 @@
 """
 import numpy as np
 import pylab as pl
+import os
 
-output_path= "\\pulled_data_terremoto_noto_2024_japon"
+output_path= "pulled_data_terremoto_noto_2024_japon"
 
 def to_plot2(t, data , pred, sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup, g_lineal, g_annual, g_heavis_eq, g_post, t_eq = None, t_at = None, name = 'Station', Tau = None, save=False):
     ew = data[:,0]
@@ -21,6 +22,7 @@ def to_plot2(t, data , pred, sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup, g_lineal,
     [_, sa] = g_heavis_eq.shape
     [_, p] = g_post.shape
     
+    os.chdir(output_path)
 
     fig1 = pl.figure(1)
     fig1.set_size_inches(11, 10)
@@ -126,7 +128,7 @@ def to_plot2(t, data , pred, sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup, g_lineal,
     pl.tight_layout()
     pl.grid(True)
     pl.legend()
-    fig1.savefig(f'{output_path}{name}_timeseries.png',dpi=300)
+    fig1.savefig(f'{name}_timeseries.png',dpi=300)
     pl.show()
 
     fig2 = pl.figure(2)
@@ -160,7 +162,10 @@ def to_plot2(t, data , pred, sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup, g_lineal,
     pl.ylabel('UP [mm]')
     pl.legend()
     pl.grid()
-    fig2.savefig(f'{output_path}{name}_component.png',dpi=300)
+    fig2.savefig(f'{name}_component.png',dpi=300)
+
+    os.chdir("..")
+    
     return None
 
 # %%

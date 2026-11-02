@@ -14,6 +14,16 @@ import time
 from MinCuad import MinCuadPesos as mmc # minimos cuadrados con pesos
 from datetime import date, datetime, timedelta # ordenar los tiempos
 import pickle
+import os
+from directo import directo as dr
+
+do_euler = True # Aplicar ajuste de euler (true o false)
+#parametros polo de euler:
+euler = {
+    'lon_euler': -75.988219,  # longitud del polo de euler
+    'lat_euler': 32.028902,   # latitud del polo de euler
+    'omega': 0.294426,  # velocidad angular del polo de euler
+}
 
 def toYearFraction(date):
     def sinceEpoch(date):  # returns seconds since epoch
@@ -170,7 +180,7 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
         if Do_plot == True: #Colocar en True
             datas = np.vstack((ew,ns,up)).T
             pred = np.vstack((Pew,Pns,Pup)).T
-            pt2(t, datas, pred,sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup,G_all['g_lineal'],G_all['g_annual'],G_all['g_heavis_eq'],G_all['g_post'],t_eq=t_eq,t_at=t_at,name=name,Tau=tau)
+            pt2(t, datas, pred,sigm_ew, sigm_ns, sigm_up, Mew, Mns, Mup,G_all['g_lineal'],G_all['g_annual'],G_all['g_heavis_eq'],G_all['g_post'],t_eq=t_eq,t_at=t_at,name=name,Tau=None)
             if new_at == True:
                 idx_jump = pl.ginput(20, timeout = 20)
                 pl.show()
@@ -197,7 +207,7 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
     wrms_u = np.sqrt(sum((Pup - up)**2 / sigm_up**2 ) / sum(1/ sigm_up**2))
 
 # Inicializar vearibles lon y lat con None
-    carpeta = "pulled_data_zona_estable_AM"
+    carpeta = "pulled_data_terremoto_noto_2024_japon"
     ruta = f"{carpeta}/id_coords.txt"
     coords = read_coords(ruta)
     lon = None
@@ -212,17 +222,37 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
 
 
 # Velocidades ITRF
-    
 
+    v_ew = Mew[1]
+    v_ns = Mns[1]
 
 # Formato de velocidades ITRF
 
+    velocidades = np.array([lon, lat, v_ew, v_ns, wrms_e, wrms_n,0], dtype=float)
 
 # Guardar archivo de velocidades ITRF si lon y lat no son None con os.path.join y np.savetxt, con formato de 6 decimales y encabezado con nombre de estación, lon y lat
+
+    carpeta_itrf = "velocidades_itrf"
+    velocidades_archivo = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF.txt")
+    
+    with open(velocidades_archivo, "a") as f:
+        np.savetxt(f, velocidades.reshape(1, -1), fmt="%.6f", delimiter="\t")
+
+
+    if do_euler: 
+        v_euler = dr(lat, lon, euler['lat_euler'], euler['lon_euler'], euler['omega'])
+        v_ew_euler = v_ew - v_euler[1]
+        v_ns_euler = v_ns - v_euler[0]
+        velocidades_euler = np.array([lon, lat, v_ew_euler, v_ns_euler,0,0,0], dtype=float)
+        velocidades_archivo_euler = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF_absoluta.txt")
+        
+        with open(velocidades_archivo_euler, "a") as f:
+            np.savetxt(f, velocidades_euler.reshape(1, -1), fmt="%.6f", delimiter="\t")
     
 # Matríz final
-    return {'Param_ew' : Iew, 'Param_ns' : Ins, 'Param_up' : Iup,
-            'fg_all' : G, 'fg' : G_all, 'new_jumps' : idx_jump,
-            'data' : datas,
-            'wrms_e': wrms_e, 'wrms_u': wrms_u, 'wrms_n': wrms_n }
-# agregar variables de velocidades ITRF y lon y lat al return
+    return {'Param_ew' : Iew, 'Param_ns' : Ins, 'Param_up' : Iup, 'fg_all' : G,
+             'fg' : G_all, 'new_jumps' : idx_jump, 'data' : datas,
+             'wrms_e': wrms_e, 'wrms_u': wrms_u, 'wrms_n': wrms_n, 
+             'velocidad_ew': v_ew, 'velocidad_ns': v_ns, 'lon': lon, 'lat': lat }
+# agregar variables de velocidades ITRF al return
+# %%
