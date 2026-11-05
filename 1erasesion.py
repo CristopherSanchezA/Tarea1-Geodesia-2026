@@ -28,7 +28,7 @@ figname = 'Map_Noto_Japan.png'
 fig = pygmt.Figure()
 
 fig.basemap(
-    region=[135.5, 139.5, 35.5,39.5],
+    region=[124.0, 140.0, 33.0, 44.5],
     projection="M12c", # M12c para proyección Mercator(M) y ancho de 12 cm
     frame=["a1g1f1"])
 
