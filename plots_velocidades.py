@@ -31,7 +31,8 @@ if not os.path.exists(grid_file):
     raise FileNotFoundError(f"{grid_file} was not created.")
 
 
-paleta = "wiki-france.cpt" # Paleta de colores # Pensar en cambiarlo por geo
+#paleta = "wiki-france.cpt" # Paleta de colores # Pensar en cambiarlo por geo
+paleta = "geo" # Paleta de colores (más bonito según yo)
 
 # Cortar la topografía y guardarla como grilla (si no existe)
 
