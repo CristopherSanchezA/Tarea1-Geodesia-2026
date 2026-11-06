@@ -96,7 +96,7 @@ def polo_euler(filename):
 #CASO EJEMPLO, para cada caso deben hacerlo según el evento que hayan escogido 
 
 carpeta = "velocidades_itrf"
-ruta = f"{carpeta}/vector_de_velocidades_ITRF_zona_estable.txt"
+ruta = f"{carpeta}/vector_de_velocidades_ITRF_zona_terremoto_v2.txt"
 
 
 [polo,vn_pred, ve_pred] = polo_euler(ruta) #Aquí ejecutamos la inversión para el archivo zona_estable.txt
@@ -105,9 +105,9 @@ data = np.loadtxt(ruta) #cargamos datos, luego separamos columnas de lon y lat
 lon=data[:,0]
 lat=data[:,1]
 vel = np.column_stack((lon, lat, ve_pred*1000, vn_pred*1000, np.zeros(len(lon)), np.zeros(len(lon)), np.zeros(len(lon)))) #Armamos una matriz vel con lon, lat, ve_pred y vn_pred convertidos a mm/año y trez columnas de ceros 
-output_polo = f'Polo_Euler.txt' #guardamos en un archivo llamado polo_euler.txt 
+output_polo = f'Polo_Euler_zona_terremoto_v2.txt' #guardamos en un archivo llamado polo_euler.txt 
 np.savetxt(output_polo, polo, fmt='%.6f', delimiter='\t') #el polo de Euler estimado en lon, lat y omega con 6 decimales
-vel_rot_ze = f'pred_zonaestable.txt'  #creamos un archivo para guardar la velocidades predichas
+vel_rot_ze = f'pred_zona_terremoto_v2.txt'  #creamos un archivo para guardar la velocidades predichas
 np.savetxt(vel_rot_ze, vel, fmt='%.6f', delimiter='\t') #guardamos las velocidades predichas por el modelo (en mm/año) junto con lon/lat y columnas extras en cero
 
 # %%

@@ -46,7 +46,7 @@ pygmt.grdcut(
 fig1    = pygmt.Figure()
 
 carpeta1 = "velocidades_itrf"
-ruta1 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_estable.txt"
+ruta1 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_estable_v2.txt"
 
 
 # Marco del mapa
@@ -59,21 +59,26 @@ fig1.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region,
 fig1.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
 
 data_stable = pd.read_csv(ruta1, sep="\t", header=None)
-data_stable[3] = data_stable[3] * 0.1  # Escalar velocidades
+#data_stable[3] = data_stable[3] * 0.1  # Escalar velocidades
 data_stable.to_csv("stable_scaled.txt", sep="\t", index=False, header=False)
-fig1.plot(
+
+#fig1.plot(data="trench.dat",pen="0.2p", style="f0.5i/0.1i+r+t+o1", fill="white")
+
+fig1.velo(
     data="stable_scaled.txt",
-    style="V0.2c+e+gblack+h0+p1p,red",
+    spec="e0.05/0.39/2",
+    vector="0.3c+p1p+e+gred",
     pen="1p,red",
-    region=region,
-    projection=projection,
 )
  
-ruta2 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_terremoto.txt"
+ruta2 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_terremoto_v2.txt"
 
+data_stable = pd.read_csv(ruta2, sep="\t", header=None)
+#data_stable[3] = data_stable[3] * 0.1  # Escalar velocidades
+data_stable.to_csv("eq_scaled.txt", sep="\t", index=False, header=False)
 # Procesar y agregar datos para Turquía
 fig1.velo(
-    data=ruta2,
+    data="eq_scaled.txt",
     spec="e0.05/0.39/2",
     vector="0.3c+p1p+e+gblue",
     pen="1p,blue",
@@ -93,8 +98,7 @@ fig1.savefig("mapa_velocidades_gps.pdf", dpi=600)
 # Creamos la figura
 fig2 = pygmt.Figure()
 
-ruta3 = "pred_zonaestable.txt"
-
+ruta3 = "pred_zona_estable_v2.txt"
 
 # Marco del mapa
 fig2.basemap(region=region, projection=projection, frame="a1g1f1") #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
@@ -106,21 +110,24 @@ fig2.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region,
 fig2.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
 
 data_pred = pd.read_csv(ruta3, sep="\t", header=None)
-data_pred[3] = data_pred[3] * 0.1  # Escalar velocidades
+#data_pred[3] = data_pred[3] * 0.1  # Escalar velocidades
 data_pred.to_csv("stable_scaled_pred.txt", sep="\t", index=False, header=False)
-fig2.plot(
+fig2.velo(
     data="stable_scaled_pred.txt",
-    style="V0.2c+e+gblack+h0+p1p,red",
+    spec="e0.05/0.39/2",
+    vector="0.3c+p1p+e+gred",
     pen="1p,red",
-    region=region,
-    projection=projection,
 )
 
-ruta4 = "pred_zonaterremoto.txt"
+ruta4 = "pred_zona_terremoto_v2.txt"
+
+data_stable = pd.read_csv(ruta4, sep="\t", header=None)
+#data_stable[3] = data_stable[3] * 0.1  # Escalar velocidades
+data_stable.to_csv("eq_scaled_pred.txt", sep="\t", index=False, header=False)
 
 # Procesar y agregar datos para Turquía
 fig2.velo(
-    data=ruta4,
+    data="eq_scaled_pred.txt",
     spec="e0.05/0.39/2",
     vector="0.3c+p1p+e+gblue",
     pen="1p,blue",
@@ -153,11 +160,26 @@ fig3.coast(region=region, projection=projection, shorelines="0.3p,black", border
 
 
 
-ruta5 = f"{carpeta1}/vector_de_velocidades_ITRF_absoluta.txt"
+ruta5 = f"{carpeta1}/vector_de_velocidades_ITRF_absoluta_v2.txt"
+data_abs = pd.read_csv(ruta5, sep="\t", header=None)
+#data_abs[3] = data_abs[3] * 0.1  # Escalar velocidades
+data_abs.to_csv("stable_scaled_abs.txt", sep="\t", index=False, header=False)
+
+ruta6 = "trench.dat"
+
+# Trazar el límite de placa (trench) con una línea segmentada gruesa (roja o negra)
+fig3.plot(
+    data=ruta6,
+    pen="1.5p,red,-",  # El "-" hace que la línea sea segmentada
+    region=region,
+    projection=projection
+)
+
+fig3.plot(x=142.37, y=38.30, style="a0.5c", pen="0.5p,black", fill="yellow") # Epicentro Terremoto 9.1 Mww de 2011
 
 # Procesar y agregar datos para Turquía
 fig3.velo(
-    data=ruta5,
+    data="stable_scaled_abs.txt",
     spec="e0.05/0.39/2",
     vector="0.3c+p1p+e+gblue",
     pen="1p,blue",

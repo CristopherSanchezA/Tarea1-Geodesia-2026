@@ -24,11 +24,12 @@ ID = matriz[:, 0]
 t_eq_noto2024 = toYearFraction(datetime(2024, 1, 1))  # 7.5 Mww
 t_eq_noto2023 = toYearFraction(datetime(2023, 5, 5))  # 6.3 Mww
 t_eq = [t_eq_noto2024, t_eq_noto2023]
+param = {}
 
 for codigo in ID:
     # Le indicamos a Python que el archivo está adentro de la subcarpeta
     sta = f"{carpeta}/{codigo}.txt"
-    param = tj(sta, t_eq=t_eq, t_at=False, Do_plot=False, new_at=True, tau=15, t_cut=2017)
+    param[codigo] = tj(sta, t_eq=t_eq, t_at=False, Do_plot=False, new_at=False, tau=15, t_cut=2017)
 
 # Mover largo de ruptura en el mata_noto.png
 

@@ -18,11 +18,13 @@ import os
 from directo import directo as dr
 
 do_euler = True # Aplicar ajuste de euler (true o false)
+do_itrf = False # Guardar velocidades ITRF (true o false)
+
 #parametros polo de euler:
 euler = {
-    'lon_euler': -75.988219,  # longitud del polo de euler
-    'lat_euler': 32.028902,   # latitud del polo de euler
-    'omega': 0.294426,  # velocidad angular del polo de euler
+    'lon_euler': -84.039335,  # longitud del polo de euler
+    'lat_euler': 46.382603,   # latitud del polo de euler
+    'omega': 0.280876,  # velocidad angular del polo de euler
 }
 
 def toYearFraction(date):
@@ -229,25 +231,32 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
 # Formato de velocidades ITRF
 
     velocidades = np.array([lon, lat, v_ew, v_ns, wrms_e, wrms_n,0], dtype=float)
+    #velocidades = np.array([lon, lat, v_ew, v_ns, wrms_n, wrms_e,0], dtype=float)
 
 # Guardar archivo de velocidades ITRF si lon y lat no son None con os.path.join y np.savetxt, con formato de 6 decimales y encabezado con nombre de estación, lon y lat
 
-    carpeta_itrf = "velocidades_itrf"
-    velocidades_archivo = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF.txt")
-    
-    with open(velocidades_archivo, "a") as f:
-        np.savetxt(f, velocidades.reshape(1, -1), fmt="%.6f", delimiter="\t")
+    if do_itrf:
+        carpeta_itrf = "velocidades_itrf"
+        velocidades_archivo = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF_zona_terremoto_v2.txt")
+            
+        with open(velocidades_archivo, "a") as f:
+            np.savetxt(f, velocidades.reshape(1, -1), fmt="%.6f", delimiter="\t")
 
 
     if do_euler: 
         v_euler = dr(lat, lon, euler['lat_euler'], euler['lon_euler'], euler['omega'])
-        v_ew_euler = v_ew - v_euler[1]
-        v_ns_euler = v_ns - v_euler[0]
+        v_ew_euler = velocidades[2] - v_euler[1]
+        v_ns_euler = velocidades[3] - v_euler[0]
         velocidades_euler = np.array([lon, lat, v_ew_euler, v_ns_euler,0,0,0], dtype=float)
-        velocidades_archivo_euler = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF_absoluta.txt")
+        carpeta_itrf = "velocidades_itrf"
+        velocidades_archivo_euler = os.path.join(carpeta_itrf, "vector_de_velocidades_ITRF_absoluta_v2.txt")
         
         with open(velocidades_archivo_euler, "a") as f:
             np.savetxt(f, velocidades_euler.reshape(1, -1), fmt="%.6f", delimiter="\t")
+
+        print(v_euler[1], v_euler[0])
+
+    
     
 # Matríz final
     return {'Param_ew' : Iew, 'Param_ns' : Ins, 'Param_up' : Iup, 'fg_all' : G,
