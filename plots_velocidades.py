@@ -43,21 +43,51 @@ pygmt.grdcut(
     outgrid=grid_file
 )
 
+frame=['WSne+t"Título del Mapa"',
+        "x4g4",
+        "y4g4"
+]
+
 # Creamos la figura 1
+
 fig1    = pygmt.Figure()
 
 carpeta1 = "velocidades_itrf"
 ruta1 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_estable_v2.txt"
 
-
 # Marco del mapa
-fig1.basemap(region=region, projection=projection, frame="a1g1f1") #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
+fig1.basemap(region=region,
+              projection=projection,
+             frame="a1g1f1"
+) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
-fig1.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region, frame=True) 
+fig1.grdimage(grid=grid_file,
+               cmap=paleta,
+             projection=projection, 
+             region=region, 
+             frame=True
+) # frame=True para mostrar la grilla de fondo
 
 # Línea de costa
-fig1.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
+fig1.coast(region=region, 
+           projection=projection, 
+           shorelines="0.3p,black", 
+           borders=[1], 
+           rivers="a/0.1p,39/64/139", 
+           frame="a5f1", 
+           resolution="h"
+)
+
+ruta6 = "trench.dat"
+
+# Trazar el límite de placa (trench) con una línea segmentada gruesa (roja o negra)
+fig1.plot(
+    data=ruta6,
+    pen="1.5p,red,-",  # El "-" hace que la línea sea segmentada
+    region=region,
+    projection=projection
+)
 
 data_stable = pd.read_csv(ruta1, sep="\t", header=None)
 #data_stable[3] = data_stable[3] * 0.1  # Escalar velocidades
@@ -90,6 +120,10 @@ fig1.show()
 # Guardar mapa como PDF
 fig1.savefig("mapa_velocidades_gps.pdf", dpi=600)
 
+
+
+
+
 #figura 2:#################################################
 
 
@@ -102,17 +136,41 @@ fig2 = pygmt.Figure()
 ruta3 = "pred_zona_estable_v2.txt"
 
 # Marco del mapa
-fig2.basemap(region=region, projection=projection, frame="a1g1f1") #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
+fig2.basemap(region=region, 
+             projection=projection, 
+             frame="a1g1f1"
+) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
-fig2.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region, frame=True) 
+fig2.grdimage(grid=grid_file, 
+              cmap=paleta, 
+              projection=projection, 
+              region=region, 
+              frame=True
+) 
 
 # Línea de costa
-fig2.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
+fig2.coast(region=region, 
+           projection=projection, 
+           shorelines="0.3p,black", 
+           borders=[1], 
+           rivers="a/0.1p,39/64/139", 
+           frame="a5f1", 
+           resolution="h"
+)
+
+# Trazar el límite de placa (trench) con una línea segmentada gruesa (roja o negra)
+fig2.plot(
+    data=ruta6,
+    pen="1.5p,red,-",  # El "-" hace que la línea sea segmentada
+    region=region,
+    projection=projection
+)
 
 data_pred = pd.read_csv(ruta3, sep="\t", header=None)
 #data_pred[3] = data_pred[3] * 0.1  # Escalar velocidades
 data_pred.to_csv("stable_scaled_pred.txt", sep="\t", index=False, header=False)
+
 fig2.velo(
     data="stable_scaled_pred.txt",
     spec="e0.05/0.39/2",
@@ -151,14 +209,28 @@ fig3 = pygmt.Figure()
 
 
 # Marco del mapa
-fig3.basemap(region=region, projection=projection, frame="a1g1f1") #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
+fig3.basemap(region=region, 
+             projection=projection, 
+             frame="a1g1f1"
+) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
-fig3.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region, frame=True) 
+fig3.grdimage(grid=grid_file, 
+              cmap=paleta, 
+              projection=projection, 
+              region=region, 
+              frame=True
+) 
 
 # Línea de costa
-fig3.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
-
+fig3.coast(region=region, 
+           projection=projection, 
+           shorelines="0.3p,black", 
+           borders=[1], 
+           rivers="a/0.1p,39/64/139", 
+           frame="a5f1", 
+           resolution="h"
+)
 
 
 ruta5 = f"{carpeta1}/vector_de_velocidades_ITRF_absoluta_v2.txt"
@@ -166,7 +238,6 @@ data_abs = pd.read_csv(ruta5, sep="\t", header=None)
 #data_abs[3] = data_abs[3] * 0.1  # Escalar velocidades
 data_abs.to_csv("stable_scaled_abs.txt", sep="\t", index=False, header=False)
 
-ruta6 = "trench.dat"
 
 # Trazar el límite de placa (trench) con una línea segmentada gruesa (roja o negra)
 fig3.plot(
@@ -176,7 +247,12 @@ fig3.plot(
     projection=projection
 )
 
-fig3.plot(x=142.37, y=38.30, style="a0.5c", pen="0.5p,black", fill="yellow") # Epicentro Terremoto 9.1 Mww de 2011
+fig3.plot(x=142.37, 
+          y=38.30, 
+          style="a0.5c", 
+          pen="0.5p,black", 
+          fill="yellow"
+) # Epicentro Terremoto 9.1 Mww de 2011
 
 # Procesar y agregar datos para Turquía
 fig3.velo(
