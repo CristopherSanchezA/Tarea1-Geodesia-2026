@@ -17,10 +17,12 @@ jc = [137.25, 37.0, "0.9c"]
 japan_region = [128, 147, 30, 46]
 
 
-paleta = "wiki-france.cpt" # Paleta de colores
+#paleta = "wiki-france.cpt" # Paleta de colores
+paleta = "geo"
 
 #Grilla de entrada y de salida
 input_grid = "ETOPO1_Ice_c_gmt4.grd"
+#input_grid = "gebco_2026_n39.5_s35.5_w135.5_e139.5.nc"
 grid_file = "topo.grd"
 
 # Cortar la topografía y guardarla como grilla (si no existe)
@@ -44,8 +46,21 @@ fig.grdimage(grid=grid_file, cmap=paleta, projection=projection, region=region, 
 # Línea de costa
 fig.coast(region=region, projection=projection, shorelines="0.3p,black", borders=[1], rivers="a/0.1p,39/64/139", frame="a5f1", resolution="h")
 
-# Trench
-fig.plot(data="trench_japan_sea.txt",pen="0.2p", style="f0.5i/0.1i+r+t+o1", fill="white")
+ruta_fallas = "fallas_noto.txt"
+
+fig.plot(
+    data=ruta_fallas,
+    # pen: Línea de 1.5 puntos de grosor, color rojo
+    pen="1.2p,red", 
+    # style="f": frente de falla (inversa)
+    # 0.4c: espacio entre triángulos
+    # 0.15c: tamaño del triángulo
+    # +r: triángulos a la derecha de la línea (dirección del Strike)
+    # +t: forma de triángulo
+    style="f0.25c/0.1c+r+t,red", 
+    #color="red", 
+    label='"Sistema de Fallas (Noto 2024)"'
+)
 
 fig.plot(x=137.271, y=37.4875, style="a0.5c", pen="0.5p,black", fill="yellow")
 

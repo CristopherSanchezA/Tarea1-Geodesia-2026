@@ -43,10 +43,6 @@ pygmt.grdcut(
     outgrid=grid_file
 )
 
-frame=['WSne+t"Título del Mapa"',
-        "x4g4",
-        "y4g4"
-]
 
 # Creamos la figura 1
 
@@ -57,16 +53,15 @@ ruta1 = f"{carpeta1}/vector_de_velocidades_ITRF_zona_estable_v2.txt"
 
 # Marco del mapa
 fig1.basemap(region=region,
-              projection=projection,
-             frame="a1g1f1"
+             projection=projection,
+             frame=["WSne", "x3f1", "y2f2"]
 ) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
 fig1.grdimage(grid=grid_file,
                cmap=paleta,
              projection=projection, 
-             region=region, 
-             frame=True
+             region=region
 ) # frame=True para mostrar la grilla de fondo
 
 # Línea de costa
@@ -75,7 +70,6 @@ fig1.coast(region=region,
            shorelines="0.3p,black", 
            borders=[1], 
            rivers="a/0.1p,39/64/139", 
-           frame="a5f1", 
            resolution="h"
 )
 
@@ -127,27 +121,23 @@ fig1.savefig("mapa_velocidades_gps.pdf", dpi=600)
 #figura 2:#################################################
 
 
-
-
-
 # Creamos la figura
 fig2 = pygmt.Figure()
 
 ruta3 = "pred_zona_estable_v2.txt"
 
 # Marco del mapa
-fig2.basemap(region=region, 
-             projection=projection, 
-             frame="a1g1f1"
+fig2.basemap(region=region,
+             projection=projection,
+             frame=["WSne", "x3f1", "y2f2"]
 ) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
-fig2.grdimage(grid=grid_file, 
-              cmap=paleta, 
-              projection=projection, 
-              region=region, 
-              frame=True
-) 
+fig2.grdimage(grid=grid_file,
+               cmap=paleta,
+             projection=projection, 
+             region=region
+) # frame=True para mostrar la grilla de fondo
 
 # Línea de costa
 fig2.coast(region=region, 
@@ -155,7 +145,6 @@ fig2.coast(region=region,
            shorelines="0.3p,black", 
            borders=[1], 
            rivers="a/0.1p,39/64/139", 
-           frame="a5f1", 
            resolution="h"
 )
 
@@ -197,30 +186,29 @@ fig2.show()
 # Guardar mapa como PDF
 fig2.savefig("mapa_velocidades_pred.pdf", dpi=600)
 
+
+
+
+
 #figura 3:#################################################
-
-
-
 
 
 # Creamos la figura
 fig3 = pygmt.Figure()
 
 
-
 # Marco del mapa
-fig3.basemap(region=region, 
-             projection=projection, 
-             frame="a1g1f1"
+fig3.basemap(region=region,
+             projection=projection,
+             frame=["WSne", "x3f1", "y2f2"]
 ) #Con frame determinamos el tamaño del marco, A1 indica el tick principal cada 1°, g la grilla principal cada 1° y f1 el tick secundario cada 1°
 
 # Grilla
-fig3.grdimage(grid=grid_file, 
-              cmap=paleta, 
-              projection=projection, 
-              region=region, 
-              frame=True
-) 
+fig3.grdimage(grid=grid_file,
+               cmap=paleta,
+             projection=projection, 
+             region=region
+) # frame=True para mostrar la grilla de fondo
 
 # Línea de costa
 fig3.coast(region=region, 
@@ -228,7 +216,6 @@ fig3.coast(region=region,
            shorelines="0.3p,black", 
            borders=[1], 
            rivers="a/0.1p,39/64/139", 
-           frame="a5f1", 
            resolution="h"
 )
 
@@ -246,6 +233,21 @@ fig3.plot(
     region=region,
     projection=projection
 )
+
+#ruta_fallas = "fallas_noto.txt"
+
+#fig3.plot(
+#    data=ruta_fallas,
+#    # pen: Línea de 1.5 puntos de grosor, color rojo
+#    pen="1.2p,red", 
+#    # style="f": frente de falla (inversa)
+#    # 0.1c: espacio entre triángulos
+#    # 0.25c: tamaño del triángulo
+#    # +r: triángulos a la derecha de la línea (dirección del Strike)
+#    # +t: forma de triángulo
+#    style="f0.25c/0.1c+r+t,red",  
+#    label='"Sistema de Fallas (Noto 2024)"'
+#)
 
 fig3.plot(x=142.37, 
           y=38.30, 
