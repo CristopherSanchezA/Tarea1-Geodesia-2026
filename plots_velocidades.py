@@ -16,7 +16,8 @@ projection = "M12c"
 jc = [137.25, 37.0, "0.9c"]
 japan_region = [128, 147, 30, 46]
 
-input_grid = "ETOPO1_Ice_c_gmt4.grd"
+#input_grid = "ETOPO1_Ice_c_gmt4.grd"
+input_grid = "gebco_2026_n44.5_s33.0_w124.0_e142.5.nc"  # Ruta al archivo de grilla de topografía y batimetría
 grid_file = "topo_japon.grd"
 
 # Cortar la topografía y guardarla como grilla (si no existe)
