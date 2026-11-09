@@ -1,2 +1,3 @@
-136.68 37.18
-138.10 37.88
+> Longitud de Ruptura (Desplazada al Noroeste)
+136.30 37.65
+137.72 38.35
