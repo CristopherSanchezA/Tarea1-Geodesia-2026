@@ -15,7 +15,7 @@ import pylab as pl
 # estaión que quiero correr
 #sta = 'BN05.txt'
 
-carpeta = "pulled_data_terremoto_noto_2024_japon"
+carpeta = "pulled_data_zona_estable_AM"
 ruta = f"{carpeta}/id_coords.txt"
 
 matriz = np.loadtxt(ruta, dtype=str)
@@ -29,7 +29,7 @@ param = {}
 for codigo in ID:
     # Le indicamos a Python que el archivo está adentro de la subcarpeta
     sta = f"{carpeta}/{codigo}.txt"
-    param[codigo] = tj(sta, t_eq=t_eq, t_at=False, Do_plot=False, new_at=False, tau=15, t_cut=2017)
+    param[codigo] = tj(sta, t_eq=False, t_at=False, Do_plot=True, new_at=False, tau=None, t_cut=2017)
 
 # Mover largo de ruptura en el mata_noto.png
 

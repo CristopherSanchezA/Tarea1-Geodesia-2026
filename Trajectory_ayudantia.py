@@ -17,7 +17,7 @@ import pickle
 import os
 from directo import directo as dr
 
-do_euler = True # Aplicar ajuste de euler (true o false)
+do_euler = False # Aplicar ajuste de euler (true o false)
 do_itrf = False # Guardar velocidades ITRF (true o false)
 
 #parametros polo de euler:
@@ -209,7 +209,7 @@ def Trajectory(ts_file, t_eq = None ,tau = None, t_at = False , new_at = False, 
     wrms_u = np.sqrt(sum((Pup - up)**2 / sigm_up**2 ) / sum(1/ sigm_up**2))
 
 # Inicializar vearibles lon y lat con None
-    carpeta = "pulled_data_terremoto_noto_2024_japon"
+    carpeta = "pulled_data_zona_estable_AM"
     ruta = f"{carpeta}/id_coords.txt"
     coords = read_coords(ruta)
     lon = None
